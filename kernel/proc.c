@@ -299,6 +299,8 @@ fork(void)
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
 
+  myproc()->trace_mask = p->trace_mask;
+
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;
 
