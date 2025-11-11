@@ -696,18 +696,18 @@ procdump(void)
   }
 }
 
-  int 
-  countProc(void)
-  {
-    struct proc *p;
-    int pnum = 0;
-    for (p = proc; p < &proc[NPROC]; p++){
-      acquire(&p->lock);
-      if (p->state != UNUSED){
-        pnum++;
-      }
-      release(&p->lock);
+int 
+countProc(void)
+{
+  struct proc *p;
+  int pnum = 0;
+  for (p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if (p->state != UNUSED){
+      pnum++;
     }
-
-    return pnum;
+    release(&p->lock);
   }
+
+  return pnum;
+}

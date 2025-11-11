@@ -87,11 +87,11 @@ countMem (void){
   int freemem = 0;
 
   acquire(&kmem.lock);
-  if (kmem.freelist){
-    for (r = kmem.freelist; r; r = r->next){
-      freemem += PGSIZE;
-    }
+  
+  for (r = kmem.freelist; r; r = r->next){
+    freemem += PGSIZE;
   }
+  
   release(&kmem.lock);
 
   return freemem;
