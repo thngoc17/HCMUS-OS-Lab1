@@ -180,3 +180,18 @@ filewrite(struct file *f, uint64 addr, int n)
   return ret;
 }
 
+int countFiles(void)
+{
+  struct file *f;
+  int ofiles = 0;
+
+  acquire(&ftable.lock);
+  for (f = ftable.file; f < ftable.file + NFILE; f++){
+    if (f->ref > 0) {
+      ofiles++;
+    }
+  }
+  release(&ftable.lock);
+
+  return ofiles;
+}
