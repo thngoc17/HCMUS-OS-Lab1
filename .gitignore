@@ -25,5 +25,5 @@ barrier
 .DS_Store
 *.dSYM
 *.pcap
-README
-report/
+README.md
+sysinfo.md
