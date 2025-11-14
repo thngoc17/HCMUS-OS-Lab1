@@ -88,7 +88,7 @@ countMem (void){
 
   acquire(&kmem.lock);
   
-  for (r = kmem.freelist; r; r = r->next){
+  for (r = kmem.freelist; r != 0; r = r->next){
     freemem += PGSIZE;
   }
   
