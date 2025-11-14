@@ -6,8 +6,8 @@ int
 main(int argc, char *argv[])
 {
   if(argc < 3){
-	fprintf(2, "Usage: trace mask command [args]\n");
-	exit(1);
+    fprintf(2, "Usage: trace mask command [args]\n");
+    exit(1);
   }
   
   trace(atoi(argv[1]));

@@ -98,6 +98,7 @@ sys_trace(void)
 {
   int mask;
   argint(0, &mask);
+  if(mask < 0) return 0;
   struct proc *p = myproc();
   p->trace_mask = mask;
   return 0;
@@ -115,8 +116,7 @@ sys_sysinfo(void)
   info.nproc = countProc();
   info.nopenfiles = countFiles();
 
-  if (copyout(myproc()->pagetable, addr, (char *)&info, sizeof(info)) < 0)
-    return -1;
-
+  if (copyout(myproc()->pagetable, addr, (char*)&info, sizeof(info)) < 0) return -1;
+  
   return 0;
 }
