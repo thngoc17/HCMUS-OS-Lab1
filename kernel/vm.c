@@ -449,3 +449,43 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+void
+vmprint(pagetable_t pagetable)
+{
+  printf("page table %p\n", pagetable);
+  for(int i = 0; i < 512; i++){
+    pte_t pte_l2 = pagetable[i];
+    if(pte_l2 & PTE_V){
+      // Level 2
+      printf(" ..%d: pte %p pa %p\n", i, (void *)pte_l2, (void *)PTE2PA(pte_l2));
+      if((pte_l2 & (PTE_R|PTE_W|PTE_X)) == 0){
+        
+        // Level 1 page table address
+        pagetable_t pt_l1 = (pagetable_t)PTE2PA(pte_l2);
+
+        // Level 1
+        for(int j = 0; j < 512; j++){
+          pte_t pte_l1 = pt_l1[j];
+          if(pte_l1 & PTE_V){
+            printf(" .. ..%d: pte %p pa %p\n", j, (void *)pte_l1, (void *)PTE2PA(pte_l1));
+
+            if((pte_l1 & (PTE_R|PTE_W|PTE_X)) == 0){
+              
+              // Level 0 page table address
+              pagetable_t pt_l0 = (pagetable_t)PTE2PA(pte_l1);
+
+              // Level 0 (leaf)
+              for(int k = 0; k < 512; k++){
+                pte_t pte_l0 = pt_l0[k];
+                if(pte_l0 & PTE_V){
+                  printf(" .. .. ..%d: pte %p pa %p\n", k, (void *)pte_l0, (void *)PTE2PA(pte_l0));
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
